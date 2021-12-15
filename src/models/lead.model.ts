@@ -60,7 +60,7 @@ export default class LeadModel {
      * @return {string|*}
      */
     getEmail() {
-        return this._phone;
+        return this._email;
     }
 
 
