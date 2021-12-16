@@ -1,0 +1,8 @@
+{
+  "leadId": {
+    "presence": {
+      "allowEmpty": false
+    },
+    "type": "string"
+  }
+}

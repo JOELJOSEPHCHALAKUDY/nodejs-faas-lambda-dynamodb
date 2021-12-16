@@ -1,10 +1,12 @@
-import * as AWS from 'aws-sdk';
+/* eslint-disable no-await-in-loop */
+
+import * as AWS from "aws-sdk";
 
 // Models
-import ResponseModel from '../models/response.model';
+import ResponseModel from "../models/response.model";
 
 // Interfaces
-import IConfig from '../interfaces/config.interface';
+import IConfig from "../interfaces/config.interface";
 
 // Enums
 import { StatusCode } from "../enums/status-code.enum";
@@ -34,104 +36,128 @@ type GetItemOutput = AWS.DynamoDB.DocumentClient.GetItemOutput;
 type DeleteItem = AWS.DynamoDB.DocumentClient.DeleteItemInput;
 type DeleteItemOutput = AWS.DynamoDB.DocumentClient.DeleteItemOutput;
 
-type Item = {[index: string]: string};
+type Item = { [index: string]: string };
 
 const {
-    STAGE,
-    DYNAMODB_LOCAL_STAGE,
-    DYNAMODB_LOCAL_ACCESS_KEY_ID,
-    DYNAMODB_LOCAL_SECRET_ACCESS_KEY,
-    DYNAMODB_LOCAL_ENDPOINT
+  STAGE,
+  DYNAMODB_LOCAL_STAGE,
+  DYNAMODB_LOCAL_ACCESS_KEY_ID,
+  DYNAMODB_LOCAL_SECRET_ACCESS_KEY,
+  DYNAMODB_LOCAL_ENDPOINT,
 } = process.env;
 
 const config: IConfig = { region: "eu-west-1" };
 if (STAGE === DYNAMODB_LOCAL_STAGE) {
-    config.accessKeyId = DYNAMODB_LOCAL_ACCESS_KEY_ID; // local dynamodb accessKeyId
-    config.secretAccessKey = DYNAMODB_LOCAL_SECRET_ACCESS_KEY; // local dynamodb secretAccessKey
-    config.endpoint = DYNAMODB_LOCAL_ENDPOINT; // local dynamodb endpoint
+  config.accessKeyId = DYNAMODB_LOCAL_ACCESS_KEY_ID; // local dynamodb accessKeyId
+  config.secretAccessKey = DYNAMODB_LOCAL_SECRET_ACCESS_KEY; // local dynamodb secretAccessKey
+  config.endpoint = DYNAMODB_LOCAL_ENDPOINT; // local dynamodb endpoint
 }
 AWS.config.update(config);
 
 const documentClient = new AWS.DynamoDB.DocumentClient();
 
 export default class DatabaseService {
-
-    getItem = async ({ key, hash, hashValue, tableName}: Item) => {
-        const params = {
-            TableName: tableName,
-            Key: {
-                id: key,
-            },
-        }
-        if (hash) {
-            params.Key[hash] = hashValue;
-        }
-        const results = await this.get(params);
-        if (Object.keys(results).length) {
-            return results;
-        }
-        console.error('Item does not exist');
-        throw new ResponseModel({ id: key }, StatusCode.BAD_REQUEST, ResponseMessage.INVALID_REQUEST)
+  getItem = async ({ key, hash, hashValue, tableName }: Item) => {
+    const params = {
+      TableName: tableName,
+      Key: {
+        id: key,
+      },
+    };
+    if (hash) {
+      params.Key[hash] = hashValue;
     }
-
-    create = async(params: PutItem): Promise<PutItemOutput> => {
-        try {
-            return await documentClient.put(params).promise();
-        } catch (error) {
-            console.error(`create-error: ${error}`);
-            throw new ResponseModel({}, 500, `create-error: ${error}`);
-        }
+    const results = await this.get(params);
+    if (Object.keys(results).length) {
+      return results;
     }
+    console.error("Item does not exist");
+    throw new ResponseModel(
+      { id: key },
+      StatusCode.BAD_REQUEST,
+      ResponseMessage.INVALID_REQUEST
+    );
+  };
 
-    batchCreate = async(params: BatchWrite): Promise<BatchWriteOutPut> => {
-        try {
-            return await documentClient.batchWrite(params).promise();
-        } catch (error) {
-            console.error(`batch-write-error: ${error}`);
-            throw new ResponseModel({}, 500, `batch-write-error: ${error}`);
-        }
+  create = async (params: PutItem): Promise<PutItemOutput> => {
+    try {
+      return await documentClient.put(params).promise();
+    } catch (error) {
+      console.error(`create-error: ${error}`);
+      throw new ResponseModel({}, 500, `create-error: ${error}`);
     }
+  };
 
-    update = async (params: UpdateItem): Promise<UpdateItemOutPut> => {
-        try {
-            // result.Attributes
-            return await documentClient.update(params).promise();
-        } catch (error) {
-            console.error(`update-error: ${error}`);
-            throw new ResponseModel({}, 500, `update-error: ${error}`);
-        }
+  batchCreate = async (params: BatchWrite): Promise<BatchWriteOutPut> => {
+    try {
+      return await documentClient.batchWrite(params).promise();
+    } catch (error) {
+      console.error(`batch-write-error: ${error}`);
+      throw new ResponseModel({}, 500, `batch-write-error: ${error}`);
     }
+  };
 
-    query = async (params: QueryItem): Promise<QueryItemOutput> => {
-        try {
-            return await documentClient.query(params).promise();
-        } catch (error) {
-            console.error(`query-error: ${error}`);
-            throw new ResponseModel({}, 500, `query-error: ${error}`);
-        }
+  update = async (params: UpdateItem): Promise<UpdateItemOutPut> => {
+    try {
+      // result.Attributes
+      return await documentClient.update(params).promise();
+    } catch (error) {
+      console.error(`update-error: ${error}`);
+      throw new ResponseModel({}, 500, `update-error: ${error}`);
     }
+  };
 
-    get = async (params: GetItem): Promise<GetItemOutput> => {
-        console.log('DB GET - STAGE: ', STAGE);
-        console.log('DB GET - params.TableName: ', params.TableName);
-        console.log('DB GET - params.Key: ', params.Key);
-
-        try {
-            return await documentClient.get(params).promise();
-        } catch (error) {
-            console.error(`get-error - TableName: ${params.TableName}`);
-            console.error(`get-error: ${error}`);
-            throw new ResponseModel({}, 500, `get-error: ${error}`);
-        }
+  query = async (params: QueryItem): Promise<QueryItemOutput> => {
+    try {
+      return await documentClient.query(params).promise();
+    } catch (error) {
+      console.error(`query-error: ${error}`);
+      throw new ResponseModel({}, 500, `query-error: ${error}`);
     }
+  };
 
-    delete = async (params: DeleteItem): Promise<DeleteItemOutput> => {
-        try {
-            return await documentClient.delete(params).promise();
-        } catch (error) {
-            console.error(`delete-error: ${error}`);
-            throw new ResponseModel({}, 500, `delete-error: ${error}`);
-        }
+  get = async (params: GetItem): Promise<GetItemOutput> => {
+    console.log("DB GET - STAGE: ", STAGE);
+    console.log("DB GET - params.TableName: ", params.TableName);
+    console.log("DB GET - params.Key: ", params.Key);
+
+    try {
+      return await documentClient.get(params).promise();
+    } catch (error) {
+      console.error(`get-error - TableName: ${params.TableName}`);
+      console.error(`get-error: ${error}`);
+      throw new ResponseModel({}, 500, `get-error: ${error}`);
     }
+  };
 
+  delete = async (params: DeleteItem): Promise<DeleteItemOutput> => {
+    try {
+      return await documentClient.delete(params).promise();
+    } catch (error) {
+      console.error(`delete-error: ${error}`);
+      throw new ResponseModel({}, 500, `delete-error: ${error}`);
+    }
+  };
+
+  getAllData = async (params: QueryItem) => {
+    try {
+      const _getAllData = async (params, startKey) => {
+        if (startKey) {
+          params.ExclusiveStartKey = startKey;
+        }
+        return documentClient.query(params).promise();
+      };
+      let lastEvaluatedKey = null;
+      let rows = [];
+      do {
+        const result = await _getAllData(params, lastEvaluatedKey);
+        rows = rows.concat(result.Items);
+        lastEvaluatedKey = result.LastEvaluatedKey;
+      } while (lastEvaluatedKey);
+      return rows;
+    } catch (error) {
+      console.error(`get-error: ${error}`);
+      throw new ResponseModel({}, 500, `delete-error: ${error}`);
+    }
+  };
 }

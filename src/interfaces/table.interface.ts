@@ -1,3 +1,3 @@
 export default interface ITable {
-    TableName: string;
+  TableName: string;
 }

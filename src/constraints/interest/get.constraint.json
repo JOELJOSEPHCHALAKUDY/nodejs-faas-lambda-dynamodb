@@ -1,0 +1,14 @@
+{
+  "leadId": {
+    "presence": {
+      "allowEmpty": false
+    },
+    "type": "string"
+  },
+  "interestId": {
+    "presence": {
+      "allowEmpty": false
+    },
+    "type": "string"
+  }
+}

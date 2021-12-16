@@ -1,4 +1,4 @@
-import validate from 'validate.js/validate';
+import validate from "validate.js/validate";
 
 // Models
 import ResponseModel from "../models/response.model";
@@ -12,18 +12,22 @@ import { IGeneric } from "../interfaces/generic.interface";
  * @param constraints
  * @return {Promise<*>}
  */
-export const validateAgainstConstraints = (values: IGeneric<string>, constraints: IGeneric<object>) => {
+export const validateAgainstConstraints = (
+  values: IGeneric<string>,
+  constraints: IGeneric<unknown>
+) => {
+  return new Promise<void>((resolve, reject) => {
+    const validation = validate(values, constraints);
 
-    return new Promise<void>((resolve, reject) => {
-        const validation = validate(values, constraints);
-
-        if (typeof validation === 'undefined') {
-            resolve();
-        } else {
-            reject(new ResponseModel({ validation }, 400, 'required fields are missing'));
-        }
-    });
-}
+    if (typeof validation === "undefined") {
+      resolve();
+    } else {
+      reject(
+        new ResponseModel({ validation }, 400, "required fields are missing")
+      );
+    }
+  });
+};
 
 /**
  * Function to split array of data
@@ -32,10 +36,10 @@ export const validateAgainstConstraints = (values: IGeneric<string>, constraints
  * @param chunkSize
  */
 export const createChunks = (data: any[], chunkSize: number) => {
-    const urlChunks = [];
-    let batchIterator = 0;
-    while (batchIterator < data.length) {
-        urlChunks.push(data.slice(batchIterator, (batchIterator += chunkSize)));
-    }
-    return urlChunks;
-}
+  const urlChunks = [];
+  let batchIterator = 0;
+  while (batchIterator < data.length) {
+    urlChunks.push(data.slice(batchIterator, (batchIterator += chunkSize)));
+  }
+  return urlChunks;
+};

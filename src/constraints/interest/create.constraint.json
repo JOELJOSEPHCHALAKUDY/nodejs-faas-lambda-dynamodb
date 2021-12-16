@@ -1,0 +1,14 @@
+{
+  "leadId": {
+    "presence": {
+      "allowEmpty": false
+    },
+    "type": "string"
+  },
+  "message": {
+    "presence": {
+      "allowEmpty": false
+    },
+    "type": "string"
+  }
+}
