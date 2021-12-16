@@ -5,7 +5,7 @@ export default {
   basicAuth: {
     handler: "handler.basicAuth",
   },
-  createList: {
+  createLead: {
     handler: "handler.createLead",
     events: [
       {
@@ -25,7 +25,7 @@ export default {
     events: [
       {
         http: {
-          method: "get",
+          method: "GET",
           path: "leads",
           authorizer: {
             name: "jwtAuth",
@@ -65,7 +65,7 @@ export default {
       },
     ],
   },
-  deleteTask: {
+  deleteInterest: {
     handler: "handler.deleteInterest",
     events: [
       {
@@ -80,12 +80,12 @@ export default {
       },
     ],
   },
-  getTask: {
+  getInterest: {
     handler: "handler.getInterest",
     events: [
       {
         http: {
-          method: "POST",
+          method: "GET",
           path: "interest",
           authorizer: {
             name: "jwtAuth",
@@ -95,7 +95,7 @@ export default {
       },
     ],
   },
-  updateTask: {
+  updateInterest: {
     handler: "handler.updateInterest",
     events: [
       {

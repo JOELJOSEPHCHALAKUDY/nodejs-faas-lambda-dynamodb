@@ -12,7 +12,7 @@ interface IInterestInterface extends IProps {
   updatedAt: Date;
 }
 
-export default class LeadModel {
+export default class InterestModel {
   private _id: string;
 
   private _leadId: string;

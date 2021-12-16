@@ -157,7 +157,7 @@ export default class DatabaseService {
       return rows;
     } catch (error) {
       console.error(`get-error: ${error}`);
-      throw new ResponseModel({}, 500, `delete-error: ${error}`);
+      throw new ResponseModel({}, 500, `get-error: ${error}`);
     }
   };
 }

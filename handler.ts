@@ -6,3 +6,7 @@ export { basicAuth } from "./src/actions/auth/basic-auth.action";
 export { createLead } from "./src/actions/lead/create-lead.action";
 export { getLeads } from "./src/actions/lead/get-lead.action";
 export { updateLead } from "./src/actions/lead/update-lead.action";
+
+// Interest funtions
+export { createInterest } from "./src/actions/interest/create-interest.action";
+export { getInterest } from "./src/actions/interest/get-interest.action";
