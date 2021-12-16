@@ -4,7 +4,7 @@ export { basicAuth } from "./src/actions/auth/basic-auth.action";
 
 // Lead functions
 export { createLead } from "./src/actions/lead/create-lead.action";
-export { getLeads } from "./src/actions/lead/get-lead.action";
+export { getLead } from "./src/actions/lead/get-lead.action";
 export { updateLead } from "./src/actions/lead/update-lead.action";
 
 // Interest funtions

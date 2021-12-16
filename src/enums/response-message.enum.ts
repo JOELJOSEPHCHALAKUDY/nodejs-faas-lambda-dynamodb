@@ -1,6 +1,7 @@
 export enum ResponseMessage {
   CREATE_LEAD_SUCCESS = "Lead successfully created",
   CREATE_LEAD_FAIL = "Lead cannot be created",
+  CREATE_LEAD_FAIL_DUPLICATE = "Lead cannot be created, as user already exisits",
   GET_LEAD_SUCCESS = "Lead successfully retrieved",
   GET_LEAD_FAIL = "Lead not found",
   UPDATE_LEAD_SUCCESS = "Lead successfully updated",

@@ -102,7 +102,7 @@ export const createLead: APIGatewayProxyHandler = async (
 
       // Initialise DynamoDB PUT parameters
       const params = {
-        TableName: process.env.LIST_TABLE,
+        TableName: process.env.LEADS_TABLE,
         Item: {
           id: data.id,
           email: data.email,
@@ -113,6 +113,29 @@ export const createLead: APIGatewayProxyHandler = async (
           updatedAt: data.updatedAt,
         },
       };
+
+      // check if lead is uneque
+      const unequeCheckParams = {
+        TableName: process.env.LEADS_TABLE,
+        FilterExpression: "#email = :emailval AND #phone = :phoneval",
+        ExpressionAttributeNames: {
+          "#email": "email",
+          "#phone": "phone",
+        },
+        ExpressionAttributeValues: {
+          ":emailval": data.email,
+          ":phoneval": data.phone,
+        },
+      };
+
+      const isLead = await databaseService.query(unequeCheckParams);
+      if (isLead) {
+        throw new ResponseModel(
+          {},
+          409,
+          `create-error: ${ResponseMessage.CREATE_LEAD_FAIL_DUPLICATE}`
+        );
+      }
       // Inserts item into DynamoDB table
       await databaseService.create(params);
       return data.id;

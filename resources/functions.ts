@@ -20,13 +20,13 @@ export default {
       },
     ],
   },
-  getLeads: {
-    handler: "handler.getLeads",
+  getLead: {
+    handler: "handler.getLead",
     events: [
       {
         http: {
           method: "GET",
-          path: "leads",
+          path: "lead",
           authorizer: {
             name: "jwtAuth",
           },

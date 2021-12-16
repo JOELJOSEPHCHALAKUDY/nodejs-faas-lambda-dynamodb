@@ -26,9 +26,9 @@ import { ResponseMessage } from "../../enums/response-message.enum";
  * Get lead list
  *
  * @api {post} /lead
- * @apiName Get lead list
- * @apiGroup lead List
- * @apiDescription Get lead list
+ * @apiName Get lead 
+ * @apiGroup Leads 
+ * @apiDescription Get lead 
  *
  * @apiSuccess {object} data
  * @apiSuccess {string} message       The response message
@@ -42,7 +42,7 @@ import { ResponseMessage } from "../../enums/response-message.enum";
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *     {
- *       "data": [{
+ *       "data": {
  *          "email": "joel@mailinator.comt",
  *          "createdAt": 1609383835145,
  *          "id": "468c8094-a756-4000-a919-974a64b5be8e",
@@ -61,8 +61,8 @@ import { ResponseMessage } from "../../enums/response-message.enum";
  *                "message": "Rent a house",
  *              },
  *           ]
- *        }],
- *       "message": "Lead list successfully retrieved"
+ *        },
+ *       "message": "Lead successfully retrieved"
  *       "status": "success"
  *     }
  *      *
@@ -70,12 +70,12 @@ import { ResponseMessage } from "../../enums/response-message.enum";
  *  @apiErrorExample {json} Error-Response: Unknown Error
  *     HTTP/1.1 500 Internal Server Error
  *    {
- *      "data": [],
+ *      "data": {},
  *      "message": "Unknown error",
  *      "status": "error"
  *    }
  */
-export const getLeads: APIGatewayProxyHandler = async (
+export const getLead: APIGatewayProxyHandler = async (
   event: APIGatewayEvent,
   _context: Context
 ): Promise<APIGatewayProxyResult> => {
@@ -88,44 +88,46 @@ export const getLeads: APIGatewayProxyHandler = async (
   // Initialise database service
   const databaseService = new DatabaseService();
 
+  // Destructure request data
+  const { leadId } = requestData;
+
   // Destructure process.env
-  const { LEADS_TABLE } = process.env;
+  const { LEADS_TABLE, INTERESTS_TABLE } = process.env;
 
   // Validate against constraints
   return validateAgainstConstraints(requestData, requestConstraints)
     .then(() => {
       // Get item from the DynamoDB table
-      return databaseService.getAllData({ TableName: LEADS_TABLE });
+      return databaseService.getItem({ key: leadId, TableName: LEADS_TABLE });
     })
     .then(async (data) => {
       // Initialise DynamoDB QUERY parameters
-      // const params = {
-      //     TableName: INTERESTS_TABLE,
-      //     IndexName : 'lead_index',
-      //     KeyConditionExpression : 'leadId = :leadIdVal',
-      //     ExpressionAttributeValues : {
-      //         ':leadIdVal' : leadId
-      //     }
-
-      // };
+      const params = {
+        TableName: INTERESTS_TABLE,
+        IndexName: "lead_index",
+        KeyConditionExpression: "leadId = :leadIdVal",
+        ExpressionAttributeValues: {
+          ":leadIdVal": leadId,
+        },
+      };
 
       // Query table for interest with the leadId
-      // const results = await databaseService.query(params);
-      // const interests = results?.Items?.map((interest) => {
-      //     return {
-      //         id: interest.id,
-      //         description: interest.message,
-      //         createdAt: interest.createdAt,
-      //         updatedAt: interest.updatedAt,
-      //     }
-      // });
+      const results = await databaseService.query(params);
+      const interests = results?.Items?.map((interest) => {
+        return {
+          id: interest.id,
+          description: interest.message,
+          createdAt: interest.createdAt,
+          updatedAt: interest.updatedAt,
+        };
+      });
 
       // Set Success Response with data
       response = new ResponseModel(
         {
           data,
-          // interestCount: interests?.length,
-          // interests: interests,
+          interestCount: interests?.length,
+          interests: interests,
         },
         StatusCode.OK,
         ResponseMessage.GET_LEAD_SUCCESS
