@@ -140,8 +140,6 @@ export const createLead: APIGatewayProxyHandler = async (
         (isLeadEmail && isLeadEmail.Count > 0) ||
         (isLeadPhone && isLeadPhone.Count > 0)
       ) {
-        console.log(isLeadEmail);
-        console.log(isLeadPhone);
         throw new ResponseModel(
           {},
           409,
