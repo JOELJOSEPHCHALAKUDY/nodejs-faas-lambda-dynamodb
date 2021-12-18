@@ -124,7 +124,7 @@ export const updateLead: APIGatewayProxyHandler = async (
           ":phone": phone,
           ":firstName": firstName,
           ":lastName": lastName,
-          ":date": new Date(),
+          ":date": new Date().getTime(),
         },
         ReturnValues: "UPDATED_NEW",
       };

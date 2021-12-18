@@ -8,8 +8,8 @@ interface IProps {
 }
 
 interface IInterestInterface extends IProps {
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: number;
+  updatedAt: number;
 }
 
 export default class InterestModel {
@@ -82,8 +82,8 @@ export default class InterestModel {
       id: this.getId(),
       leadId: this.getLeadId(),
       message: this.getMessage(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: new Date().getTime(),
+      updatedAt: new Date().getTime(),
     };
   }
 }

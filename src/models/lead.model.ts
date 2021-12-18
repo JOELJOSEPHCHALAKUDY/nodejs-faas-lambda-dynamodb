@@ -9,8 +9,8 @@ interface IProps {
   lastName: string;
 }
 interface ILeadInterface extends IProps {
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: number;
+  updatedAt: number;
 }
 export default class LeadModel {
   private _id: string;
@@ -128,8 +128,8 @@ export default class LeadModel {
       phone: this.getPhone(),
       firstName: this.getFirstName(),
       lastName: this.getLastName(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: new Date().getTime(),
+      updatedAt: new Date().getTime(),
     };
   }
 }

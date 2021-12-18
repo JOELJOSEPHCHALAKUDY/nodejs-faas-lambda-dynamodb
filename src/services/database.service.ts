@@ -83,6 +83,13 @@ export default class DatabaseService {
     try {
       return await documentClient.put(params).promise();
     } catch (error) {
+      if (error && error.code === "ConditionalCheckFailedException") {
+        throw new ResponseModel(
+          {},
+          409,
+          `create-error: ${ResponseMessage.CREATE_LEAD_FAIL_DUPLICATE}`
+        );
+      }
       console.error(`create-error: ${error}`);
       throw new ResponseModel({}, 500, `create-error: ${error}`);
     }
@@ -136,6 +143,15 @@ export default class DatabaseService {
     } catch (error) {
       console.error(`delete-error: ${error}`);
       throw new ResponseModel({}, 500, `delete-error: ${error}`);
+    }
+  };
+
+  scan = async (params: QueryItem): Promise<QueryItemOutput> => {
+    try {
+      return await documentClient.scan(params).promise();
+    } catch (error) {
+      console.error(`query-error: ${error}`);
+      throw new ResponseModel({}, 500, `query-error: ${error}`);
     }
   };
 

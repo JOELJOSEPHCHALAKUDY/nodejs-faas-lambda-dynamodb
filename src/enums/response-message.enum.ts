@@ -4,6 +4,8 @@ export enum ResponseMessage {
   CREATE_LEAD_FAIL_DUPLICATE = "Lead cannot be created, as user already exisits",
   GET_LEAD_SUCCESS = "Lead successfully retrieved",
   GET_LEAD_FAIL = "Lead not found",
+  GET_LEAD_LIST_SUCCESS = "Lead list successfully retrieved",
+  GET_LEAD_LIST_FAIL = "Lead list cannot be retrieved",
   UPDATE_LEAD_SUCCESS = "Lead successfully updated",
   UPDATE_LEAD_FAIL = "Lead cannot be updated",
   GET_INTEREST_SUCCESS = "Interest successfully retrieved",

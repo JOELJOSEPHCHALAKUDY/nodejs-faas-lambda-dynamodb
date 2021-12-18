@@ -4,12 +4,33 @@ export default {
     DeletionPolicy: "Retain",
     Properties: {
       TableName: "${self:provider.environment.LEADS_TABLE}",
-      AttributeDefinitions: [{ AttributeName: "id", AttributeType: "S" }],
+      AttributeDefinitions: [
+        { AttributeName: "id", AttributeType: "S" },
+        { AttributeName: "email", AttributeType: "S" },
+        { AttributeName: "phone", AttributeType: "S" },
+      ],
       KeySchema: [{ AttributeName: "id", KeyType: "HASH" }],
       ProvisionedThroughput: {
         ReadCapacityUnits: "${self:custom.table_throughput}",
         WriteCapacityUnits: "${self:custom.table_throughput}",
       },
+      GlobalSecondaryIndexes: [
+        {
+          IndexName: "emai_phone_index",
+          KeySchema: [
+            { AttributeName: "email", KeyType: "HASH" },
+            { AttributeName: "phone", KeyType: "RANGE" },
+          ],
+          Projection: {
+            // attributes to project into the index
+            ProjectionType: "ALL", // (ALL | KEYS_ONLY | INCLUDE)
+          },
+          ProvisionedThroughput: {
+            ReadCapacityUnits: "${self:custom.table_throughput}",
+            WriteCapacityUnits: "${self:custom.table_throughput}",
+          },
+        },
+      ],
     },
   },
   InterestsTable: {

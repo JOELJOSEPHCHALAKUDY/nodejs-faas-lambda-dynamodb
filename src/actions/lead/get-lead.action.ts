@@ -23,7 +23,7 @@ import { StatusCode } from "../../enums/status-code.enum";
 import { ResponseMessage } from "../../enums/response-message.enum";
 
 /***
- * Get lead list
+ * Get lead 
  *
  * @api {post} /lead
  * @apiName Get lead 
@@ -93,12 +93,13 @@ export const getLead: APIGatewayProxyHandler = async (
 
   // Destructure process.env
   const { LEADS_TABLE, INTERESTS_TABLE } = process.env;
+  console.log(LEADS_TABLE);
 
   // Validate against constraints
   return validateAgainstConstraints(requestData, requestConstraints)
     .then(() => {
       // Get item from the DynamoDB table
-      return databaseService.getItem({ key: leadId, TableName: LEADS_TABLE });
+      return databaseService.getItem({ key: leadId, tableName: LEADS_TABLE });
     })
     .then(async (data) => {
       // Initialise DynamoDB QUERY parameters
@@ -125,7 +126,7 @@ export const getLead: APIGatewayProxyHandler = async (
       // Set Success Response with data
       response = new ResponseModel(
         {
-          data,
+          ...data,
           interestCount: interests?.length,
           interests: interests,
         },

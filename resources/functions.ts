@@ -25,8 +25,23 @@ export default {
     events: [
       {
         http: {
-          method: "GET",
+          method: "POST",
           path: "lead",
+          authorizer: {
+            name: "jwtAuth",
+          },
+          cors: true,
+        },
+      },
+    ],
+  },
+  listLead: {
+    handler: "handler.listLead",
+    events: [
+      {
+        http: {
+          method: "POST",
+          path: "lead/list",
           authorizer: {
             name: "jwtAuth",
           },
@@ -65,43 +80,13 @@ export default {
       },
     ],
   },
-  deleteInterest: {
-    handler: "handler.deleteInterest",
-    events: [
-      {
-        http: {
-          method: "POST",
-          path: "interest/delete",
-          authorizer: {
-            name: "jwtAuth",
-          },
-          cors: true,
-        },
-      },
-    ],
-  },
   getInterest: {
     handler: "handler.getInterest",
     events: [
       {
         http: {
-          method: "GET",
-          path: "interest",
-          authorizer: {
-            name: "jwtAuth",
-          },
-          cors: true,
-        },
-      },
-    ],
-  },
-  updateInterest: {
-    handler: "handler.updateInterest",
-    events: [
-      {
-        http: {
           method: "POST",
-          path: "interest/update",
+          path: "interest",
           authorizer: {
             name: "jwtAuth",
           },

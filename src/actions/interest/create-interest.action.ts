@@ -105,23 +105,23 @@ export const createInterest: APIGatewayProxyHandler = async (
     validateAgainstConstraints(requestData, requestConstraints),
     // Get item from the DynamoDB table
     databaseService.getItem({
-      key: requestData.listId,
+      key: requestData.leadId,
       tableName: process.env.LEADS_TABLE,
     }),
   ])
     .then(async () => {
       // Initialise and hydrate model
-      const taskModel = new InterestModel(requestData);
+      const interestModel = new InterestModel(requestData);
 
       // Get model data
-      const data = taskModel.getEntityMappings();
+      const data = interestModel.getEntityMappings();
 
       // Initialise DynamoDB PUT parameters
       const params = {
         TableName: process.env.INTERESTS_TABLE,
         Item: {
           id: data.id,
-          listId: data.leadId,
+          leadId: data.leadId,
           message: data.message,
           createdAt: data.createdAt,
           updatedAt: data.updatedAt,

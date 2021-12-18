@@ -103,6 +103,7 @@ export const createLead: APIGatewayProxyHandler = async (
       // Initialise DynamoDB PUT parameters
       const params = {
         TableName: process.env.LEADS_TABLE,
+        IndexName: "emai_phone_index",
         Item: {
           id: data.id,
           email: data.email,
@@ -112,30 +113,36 @@ export const createLead: APIGatewayProxyHandler = async (
           createdAt: data.createdAt,
           updatedAt: data.updatedAt,
         },
-      };
-
-      // check if lead is uneque
-      const unequeCheckParams = {
-        TableName: process.env.LEADS_TABLE,
-        FilterExpression: "#email = :emailval AND #phone = :phoneval",
+        ConditionExpression:
+          "attribute_not_exists(#email) AND attribute_not_exists(#phone)",
         ExpressionAttributeNames: {
           "#email": "email",
           "#phone": "phone",
         },
-        ExpressionAttributeValues: {
-          ":emailval": data.email,
-          ":phoneval": data.phone,
-        },
       };
 
-      const isLead = await databaseService.query(unequeCheckParams);
-      if (isLead) {
-        throw new ResponseModel(
-          {},
-          409,
-          `create-error: ${ResponseMessage.CREATE_LEAD_FAIL_DUPLICATE}`
-        );
-      }
+      // check if lead is uneque
+      // const unequeCheckParams = {
+      //   TableName: process.env.LEADS_TABLE,
+      //   ConditionExpression: "#email = :emailval OR #phone = :phoneval",
+      //   ExpressionAttributeNames: {
+      //     "#email": "email",
+      //     "#phone": "phone",
+      //   },
+      //   ExpressionAttributeValues: {
+      //     ":emailval": data.email,
+      //     ":phoneval": data.phone,
+      //   },
+      // };
+
+      // const isLead = await databaseService.query(unequeCheckParams);
+      // if (isLead) {
+      //   throw new ResponseModel(
+      //     {},
+      //     409,
+      //     `create-error: ${ResponseMessage.CREATE_LEAD_FAIL_DUPLICATE}`
+      //   );
+      // }
       // Inserts item into DynamoDB table
       await databaseService.create(params);
       return data.id;
