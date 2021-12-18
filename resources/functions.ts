@@ -95,4 +95,19 @@ export default {
       },
     ],
   },
+  updateInterest: {
+    handler: "handler.updateInterest",
+    events: [
+      {
+        http: {
+          method: "POST",
+          path: "interest/update",
+          authorizer: {
+            name: "jwtAuth",
+          },
+          cors: true,
+        },
+      },
+    ],
+  },
 };

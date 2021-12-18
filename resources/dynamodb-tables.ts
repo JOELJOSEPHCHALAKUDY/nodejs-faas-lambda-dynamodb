@@ -16,11 +16,20 @@ export default {
       },
       GlobalSecondaryIndexes: [
         {
-          IndexName: "emai_phone_index",
-          KeySchema: [
-            { AttributeName: "email", KeyType: "HASH" },
-            { AttributeName: "phone", KeyType: "RANGE" },
-          ],
+          IndexName: "emai_index",
+          KeySchema: [{ AttributeName: "email", KeyType: "HASH" }],
+          Projection: {
+            // attributes to project into the index
+            ProjectionType: "ALL", // (ALL | KEYS_ONLY | INCLUDE)
+          },
+          ProvisionedThroughput: {
+            ReadCapacityUnits: "${self:custom.table_throughput}",
+            WriteCapacityUnits: "${self:custom.table_throughput}",
+          },
+        },
+        {
+          IndexName: "phone_index",
+          KeySchema: [{ AttributeName: "phone", KeyType: "HASH" }],
           Projection: {
             // attributes to project into the index
             ProjectionType: "ALL", // (ALL | KEYS_ONLY | INCLUDE)

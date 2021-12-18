@@ -103,7 +103,6 @@ export const createLead: APIGatewayProxyHandler = async (
       // Initialise DynamoDB PUT parameters
       const params = {
         TableName: process.env.LEADS_TABLE,
-        IndexName: "emai_phone_index",
         Item: {
           id: data.id,
           email: data.email,
@@ -113,36 +112,42 @@ export const createLead: APIGatewayProxyHandler = async (
           createdAt: data.createdAt,
           updatedAt: data.updatedAt,
         },
-        ConditionExpression:
-          "attribute_not_exists(#email) AND attribute_not_exists(#phone)",
-        ExpressionAttributeNames: {
-          "#email": "email",
-          "#phone": "phone",
+      };
+
+      // check if lead is uneque
+      const unequeEmailCheckParams = {
+        TableName: process.env.LEADS_TABLE,
+        IndexName: "emai_index",
+        KeyConditionExpression: "email = :emailVal",
+        ExpressionAttributeValues: {
+          ":emailVal": data.email,
         },
       };
 
       // check if lead is uneque
-      // const unequeCheckParams = {
-      //   TableName: process.env.LEADS_TABLE,
-      //   ConditionExpression: "#email = :emailval OR #phone = :phoneval",
-      //   ExpressionAttributeNames: {
-      //     "#email": "email",
-      //     "#phone": "phone",
-      //   },
-      //   ExpressionAttributeValues: {
-      //     ":emailval": data.email,
-      //     ":phoneval": data.phone,
-      //   },
-      // };
+      const unequePhoneCheckParams = {
+        TableName: process.env.LEADS_TABLE,
+        IndexName: "phone_index",
+        KeyConditionExpression: "phone = :phoneVal",
+        ExpressionAttributeValues: {
+          ":phoneVal": data.email,
+        },
+      };
 
-      // const isLead = await databaseService.query(unequeCheckParams);
-      // if (isLead) {
-      //   throw new ResponseModel(
-      //     {},
-      //     409,
-      //     `create-error: ${ResponseMessage.CREATE_LEAD_FAIL_DUPLICATE}`
-      //   );
-      // }
+      const isLeadEmail = await databaseService.query(unequeEmailCheckParams);
+      const isLeadPhone = await databaseService.query(unequePhoneCheckParams);
+      if (
+        (isLeadEmail && isLeadEmail.Count > 0) ||
+        (isLeadPhone && isLeadPhone.Count > 0)
+      ) {
+        console.log(isLeadEmail);
+        console.log(isLeadPhone);
+        throw new ResponseModel(
+          {},
+          409,
+          `create-error: ${ResponseMessage.CREATE_LEAD_FAIL_DUPLICATE}`
+        );
+      }
       // Inserts item into DynamoDB table
       await databaseService.create(params);
       return data.id;

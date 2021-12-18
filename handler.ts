@@ -11,3 +11,4 @@ export { listLead } from "./src/actions/lead/list-lead.action";
 // Interest funtions
 export { createInterest } from "./src/actions/interest/create-interest.action";
 export { getInterest } from "./src/actions/interest/get-interest.action";
+export { updateInterest } from "./src/actions/interest/update-interest.action";
