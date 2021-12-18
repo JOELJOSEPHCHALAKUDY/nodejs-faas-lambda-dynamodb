@@ -1,6 +1,6 @@
 # Serverless ISD lead management App
 
-Simple serverless Lead managment application
+A Simple lead management system developed as a FaaS ( Function as a Service ) using Nodejs , Aws Lambda, DynamoDb in typescript
 
 ## Installation
 
