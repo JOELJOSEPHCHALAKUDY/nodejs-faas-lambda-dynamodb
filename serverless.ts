@@ -9,7 +9,7 @@ import dynamoDbTables from "./resources/dynamodb-tables";
 import functions from "./resources/functions";
 
 const serverlessConfiguration: AWS = {
-  service: "serverless-isd-app",
+  service: "lead-management-app",
   frameworkVersion: "2",
   custom: {
     region: "${opt:region, self:provider.region}",
