@@ -89,7 +89,7 @@ export const submitLeadForm: APIGatewayProxyHandler = async (
   let response;
 
   // Parse request parameters
-  const requestData = JSON.parse(event.body);
+  const requestData = event.body ? JSON.parse(event.body) : event;
 
   // Initialise database service
   const databaseService = new DatabaseService();
@@ -142,7 +142,7 @@ export const submitLeadForm: APIGatewayProxyHandler = async (
       if (isLeadEmail && isLeadEmail.Count > 0) {
         return isLeadEmail.Items[0];
       } else if (isLeadPhone && isLeadPhone.Count > 0) {
-        return isLeadEmail.Items[0];
+        return isLeadPhone.Items[0];
       }
       // Inserts item into DynamoDB table
       await databaseService.create(params);
