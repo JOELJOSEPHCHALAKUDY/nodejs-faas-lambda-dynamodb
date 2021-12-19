@@ -64,6 +64,11 @@ See more information on [DynamoDB Local](https://www.npmjs.com/package/serverles
 `POST update interest -`
 [http://localhost:3000/dev/interest/update](http://localhost:3000/dev/interest/update)
 
+##### Forms
+
+`POST Submit leads Form`
+[http://localhost:3000/dev/lead-form](http://localhost:3000/dev/lead-form)
+
 ## Note
 
 For this demo application, you need to create a token-based Lambda authorizer using the third-party identity provider Auth0, Sign up to Auth0 for free and then the CREATE API project to get the credentilas and then copy it to .env

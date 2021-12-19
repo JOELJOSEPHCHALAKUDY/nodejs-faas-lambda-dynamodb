@@ -110,4 +110,16 @@ export default {
       },
     ],
   },
+  submitLeadForm: {
+    handler: "handler.submitLeadForm",
+    events: [
+      {
+        http: {
+          method: "POST",
+          path: "form/lead-form",
+          cors: true,
+        },
+      },
+    ],
+  },
 };

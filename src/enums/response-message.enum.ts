@@ -14,6 +14,8 @@ export enum ResponseMessage {
   CREATE_INTEREST_FAIL = "Interest could not be added",
   UPDATE_INTEREST_SUCCESS = "Interest successfully updated",
   UPDATE_INTEREST_FAIL = "Interest could not be updated",
+  LEAD_FORM_SUCCESS = "Success, Thank you for contacting us",
+  LEAD_FORM_LEAD_FAIL = "Someting went wrong",
   ERROR = "Unknown error.",
   INVALID_REQUEST = "Invalid Request!",
   //   GET_ITEM_ERROR = "Item does not exist",
