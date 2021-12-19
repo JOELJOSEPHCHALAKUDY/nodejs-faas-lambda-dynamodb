@@ -33,6 +33,12 @@ the following command.
 serverless offline start
 ```
 
+OR
+
+```bash
+sls offline start
+```
+
 Open a browser and go to the url [http://localhost:8008/shell](http://localhost:8008/shell) to access the web shell for dynamodb local.
 
 See more information on [DynamoDB Local](https://www.npmjs.com/package/serverless-dynamodb-local) advanced options and configuration.
@@ -41,32 +47,32 @@ See more information on [DynamoDB Local](https://www.npmjs.com/package/serverles
 
 ##### Leads
 
-`POST create lead -`
+`POST create lead - AUTH Enabled -`
 [http://localhost:3000/dev/lead/create](http://localhost:3000/dev/lead/create)
 
-`POST Get lead and interest -`
+`POST Get lead and interest - AUTH Enabled -`
 [http://localhost:3000/dev/lead](http://localhost:3000/dev/lead)
 
-`POST update lead -`
+`POST update lead - AUTH Enabled -`
 [http://localhost:3000/dev/lead/update](http://localhost:3000/dev/lead/update)
 
-`POST Get all leads -`
+`POST Get all leads - AUTH Enabled -`
 [http://localhost:3000/dev/lead/list](http://localhost:3000/dev/lead/list)
 
 ##### Interests
 
-`POST create interest -`
+`POST create interest - AUTH Enabled -`
 [http://localhost:3000/dev/interest/create](http://localhost:3000/dev/interest/create)
 
-`POST Get interest -`
+`POST Get interest - AUTH Enabled -`
 [http://localhost:3000/dev/interest](http://localhost:3000/dev/interest)
 
-`POST update interest -`
+`POST update interest - AUTH Enabled -`
 [http://localhost:3000/dev/interest/update](http://localhost:3000/dev/interest/update)
 
 ##### Forms
 
-`POST Submit leads Form`
+`POST Submit leads Form - Public API`
 [http://localhost:3000/dev/form/lead-form](http://localhost:3000/dev/form/lead-form)
 
 ## Note
@@ -81,4 +87,30 @@ TOKEN="<JWT-TOKEN-VALUE>"
 TOKEN_ISSUER="<ISSUER-VALUE>"
 AUTH0_CLIENT_ID="<CLIENT-ID>"
 AUTH0_CLIENT_SECRET="<CLIENT-SECRET>"
+```
+
+To obtain a valid token to test our endpoints, go to **Application** page in **Auth0** and click on the **Quick Start** use this Bearer token value in our request Authorization of AUTH Enabled endpoints
+
+## Deployment
+
+To deploy, we can either use the default AWS profile by running the following in your working directory:
+
+```
+serverless deploy
+```
+
+Or
+
+if you have multiple profiles and wish to deploy with a specific profile, then you have to run the following command:
+
+```
+serverless deploy --stage dev
+```
+
+And it will deploy using the profile set for the dev stage.
+
+And when we make changes to our functions, we can also use the serverless deploy function command to deploy an individual function and avoid going through the entire deployment cycle. As an example, we can run the following to deploy the **listLead** function again:
+
+```
+serverless deploy function -f listLead
 ```
