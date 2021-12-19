@@ -67,7 +67,7 @@ See more information on [DynamoDB Local](https://www.npmjs.com/package/serverles
 ##### Forms
 
 `POST Submit leads Form`
-[http://localhost:3000/dev/lead-form](http://localhost:3000/dev/lead-form)
+[http://localhost:3000/dev/form/lead-form](http://localhost:3000/dev/form/lead-form)
 
 ## Note
 
