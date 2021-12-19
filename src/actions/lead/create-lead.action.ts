@@ -86,7 +86,7 @@ export const createLead: APIGatewayProxyHandler = async (
   let response;
 
   // Parse request parameters
-  const requestData = JSON.parse(event.body);
+  const requestData = event.body ? JSON.parse(event.body) : event;
 
   // Validate against constraints
   return validateAgainstConstraints(requestData, requestConstraints)

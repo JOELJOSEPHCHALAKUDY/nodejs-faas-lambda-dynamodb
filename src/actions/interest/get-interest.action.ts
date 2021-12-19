@@ -86,7 +86,7 @@ export const getInterest: APIGatewayProxyHandler = async (
   let response;
 
   // Parse request parameters
-  const requestData = JSON.parse(event.body);
+  const requestData = event.body ? JSON.parse(event.body) : event;
 
   // Initialise database service
   const databaseService = new DatabaseService();
