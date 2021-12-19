@@ -1,8 +1,9 @@
 {
-  "name": "serverless-isd-app",
+  "name": "faas-lead-managemnet-app",
   "version": "1.0.0",
   "description": "Serverless aws-nodejs-typescript template",
   "main": "serverless.ts",
+  "author": "Joel Joseph",
   "scripts": {
     "dev": "serverless offline start",
     "deploy": "serverless deploy",
